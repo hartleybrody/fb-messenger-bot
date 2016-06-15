@@ -49,7 +49,7 @@ def webook():
 
 
 def send_message(recipient_id, message_text):
-    log("--------------------")
+
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
@@ -67,9 +67,9 @@ def send_message(recipient_id, message_text):
         }
     })
     r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
-    log(r.text)
-    log(r.status_code)
-    log("--------------------")
+    if r.status_code != 200:
+        log(r.status_code)
+        log(r.text)
 
 
 def log(message):  # simple wrapper for logging on heroku
