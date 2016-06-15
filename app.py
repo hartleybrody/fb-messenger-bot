@@ -16,6 +16,8 @@ def webook():
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         return request.args["hub.challenge"]
 
+    print request.form
+
     return "ok"
 
 
