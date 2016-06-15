@@ -16,7 +16,7 @@ def webook():
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         if not request.args.get("verify_token") == os.environ["VERIFY_TOKEN"]:
             return "Verification token mismatch", 403
-        return request.args["hub.challenge"]
+        return request.args["hub.challenge"], 200
 
     data = request.get_json()
     log(data)
@@ -50,6 +50,7 @@ def webook():
 
 
 def send_message(recipient_id, message_text):
+    log("--------------------")
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
@@ -66,7 +67,11 @@ def send_message(recipient_id, message_text):
             "text": message_text
         }
     })
-    requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+    log(r.text)
+    log(r.status_code)
+    log("--------------------")
+
 
 
 def log(message):
