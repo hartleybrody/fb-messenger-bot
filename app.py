@@ -24,27 +24,24 @@ def webook():
     if data["object"] == "page":
 
         for entry in data["entry"]:
-            for message in entry["messaging"]:
+            for messaging_event in entry["messaging"]:
 
-                # the facebook ID of the person sending you the message
-                sender_id = message["sender"]["id"]
+                if messaging_event.get("message"):  # someone sent us a message
 
-                # the recipient's ID, which should be your page's facebook ID
-                recipient_id = message["recipient"]["id"]
+                    sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
+                    recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
+                    message_text = messaging_event["message"]["text"]  # the message's text
 
-                # the timestamp of the message
-                timestamp = message["timestamp"]
+                    send_message(sender_id, "got it, thanks!")
 
-                # the message ID
-                message_id = message["message"]["mid"]
+                if messaging_event.get("delivery"):
+                    continue  # delivery confirmation
 
-                # the message sequence number
-                message_seq = message["message"]["seq"]
+                if messaging_event.get("optin"):
+                    continue  # optin confirmation
 
-                # the message text
-                message_text = message["message"]["text"]
-
-                send_message(sender_id, "got it, thanks!")
+                if messaging_event.get("postback"):
+                    continue  # postback
 
     return "ok"
 
@@ -73,8 +70,7 @@ def send_message(recipient_id, message_text):
     log("--------------------")
 
 
-
-def log(message):
+def log(message):  # simple wrapper for logging on heroku
     print str(message)
     sys.stdout.flush()
 
