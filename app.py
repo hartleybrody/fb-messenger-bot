@@ -9,15 +9,11 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def webook():
 
-    print request.form
-    sys.stdout.flush()
-
-    if not request.args.get("verify_token") == os.environ["VERIFY_TOKEN"]:
-        return "Verification token mismatch", 403
-
     # when endpoint is registered as a webhook, it must
     # return the 'hub.challenge' value in the query arguments
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
+        if not request.args.get("verify_token") == os.environ["VERIFY_TOKEN"]:
+            return "Verification token mismatch", 403
         return request.args["hub.challenge"]
 
     return "ok"
