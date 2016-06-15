@@ -44,7 +44,7 @@ def webook():
                 # the message text
                 message_text = message["message"]["text"]
 
-                send_message(recipient_id, "got it, thanks!")
+                send_message(sender_id, "got it, thanks!")
 
     return "ok"
 
