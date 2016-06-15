@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def verify():
-    # when endpoint is registered as a webhook, it must
+    # when the endpoint is registered as a webhook, it must
     # return the 'hub.challenge' value in the query arguments
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         if not request.args.get("verify_token") == os.environ["VERIFY_TOKEN"]:
@@ -23,8 +23,10 @@ def verify():
 @app.route('/', methods=['POST'])
 def webook():
 
+    # endpoint for processing incoming messaging events
+
     data = request.get_json()
-    log(data)
+    log(data)  # you may not want to log every incoming message in production, but it's good for testing
 
     if data["object"] == "page":
 
@@ -39,14 +41,14 @@ def webook():
 
                     send_message(sender_id, "got it, thanks!")
 
-                if messaging_event.get("delivery"):
-                    continue  # delivery confirmation
+                if messaging_event.get("delivery"):  # delivery confirmation
+                    pass
 
-                if messaging_event.get("optin"):
-                    continue  # optin confirmation
+                if messaging_event.get("optin"):  # optin confirmation
+                    pass
 
-                if messaging_event.get("postback"):
-                    continue  # postback
+                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
+                    pass
 
     return "ok", 200
 
@@ -75,7 +77,7 @@ def send_message(recipient_id, message_text):
         log(r.text)
 
 
-def log(message):  # simple wrapper for logging on heroku
+def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
     sys.stdout.flush()
 
