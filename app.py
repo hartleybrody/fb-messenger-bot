@@ -1,4 +1,5 @@
 import os
+import sys
 
 from flask import Flask, request
 
@@ -8,6 +9,9 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def webook():
 
+    print request.form
+    sys.stdout.flush()
+
     if not request.args.get("verify_token") == os.environ["VERIFY_TOKEN"]:
         return "Verification token mismatch", 403
 
@@ -15,8 +19,6 @@ def webook():
     # return the 'hub.challenge' value in the query arguments
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         return request.args["hub.challenge"]
-
-    print request.form
 
     return "ok"
 
