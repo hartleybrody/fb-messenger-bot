@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 
 import requests
@@ -18,6 +19,7 @@ def webook():
         return request.args["hub.challenge"]
 
     data = request.get_json()
+    log(data)
 
     if data["object"] == "page":
 
@@ -48,6 +50,8 @@ def webook():
 
 
 def send_message(recipient_id, message_text):
+    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
+
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -63,6 +67,11 @@ def send_message(recipient_id, message_text):
         }
     })
     requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+
+
+def log(message):
+    print str(message)
+    sys.stdout.flush()
 
 
 if __name__ == '__main__':
