@@ -17,7 +17,7 @@ def verify():
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
 
-    return "Hello world", 200
+    return "Sriram's Resume Bot", 200
 
 
 @app.route('/', methods=['POST'])
@@ -48,7 +48,7 @@ def webook():
                     pass
 
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
-                    pass
+                    return "Got postback",200
 
     return "ok", 200
 
