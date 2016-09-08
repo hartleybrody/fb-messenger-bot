@@ -21,7 +21,7 @@ def verify():
 
 
 @app.route('/', methods=['POST'])
-def webook():
+def webhook():
 
     # endpoint for processing incoming messaging events
 
