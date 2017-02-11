@@ -40,9 +40,9 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     if message_text == "hello":
-                    	send_message(sender_id, "Hello")
+                    	send_message(sender_id, "Hello") or send_message(sender_id, "hi! Welcome")
                     else:
-                    	send_message(sender_id, "got it, thanks!")
+                    	send_message(sender_id, "I'm machine learning your question, I will respond to your questions soon!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
