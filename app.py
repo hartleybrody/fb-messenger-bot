@@ -49,7 +49,7 @@ def webhook():
                     
                     else:
                     	send_message(sender_id, "I'm machine learning your question, I will respond to your questions soon!")
-
+            #End of the training module
 
 
                 if messaging_event.get("delivery"):  # delivery confirmation
