@@ -39,14 +39,18 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
+                    # start of the message training module
+
                     if message_text == "hello" or message_text == "hi" or message_text == "Hi" or message_text == "Hello":
-                    	send_message(sender_id, "Hello!")
+                    	send_message(sender_id, "Hello! "+sender_id)
 
                     elif message_text == "who are you" or message_text == "who are you?" or message_text == "Who are you" or message_text == "Who are you?":
                     	send_message(sender_id, "I am Aura, The campus assistant")
                     
                     else:
                     	send_message(sender_id, "I'm machine learning your question, I will respond to your questions soon!")
+
+
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
