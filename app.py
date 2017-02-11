@@ -40,10 +40,11 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     if message_text == "hello" or message_text == "hi" or message_text == "Hi" or message_text == "Hello":
-                    	send_message(sender_id, "Hello")
+                    	send_message(sender_id, "Hello!")
 
-                    if message_text == "who are you" or message_text == "who are you?" or message_text == "Who are you" or message_text == "Who are you?":
+                    elif message_text == "who are you" or message_text == "who are you?" or message_text == "Who are you" or message_text == "Who are you?":
                     	send_message(sender_id, "I am Aura, The campus assistant")
+                    
                     else:
                     	send_message(sender_id, "I'm machine learning your question, I will respond to your questions soon!")
 
