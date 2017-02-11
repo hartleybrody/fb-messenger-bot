@@ -41,10 +41,10 @@ def webhook():
 
                     # start of the message training module
 
-                    if message_text == "hello" or message_text == "hi" or message_text == "Hi" or message_text == "Hello":
+                    if message_text.lower() == "hello" or message_text.lower() == "hi":
                     	send_message(sender_id, "Hello!")
 
-                    elif message_text == "who are you" or message_text == "who are you?" or message_text == "Who are you" or message_text == "Who are you?":
+                    elif message_text.lower() == "who are you" or message_text.lower() == "who are you?":
                     	send_message(sender_id, "I am Aura, The campus assistant")
                     
                     else:
