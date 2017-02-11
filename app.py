@@ -38,17 +38,29 @@ def webhook():
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
+                    sender_name = messaging_event["first_name"]["string"]
 
                     # start of the message training module
 
+                    name = "hello" + sender_name
+
                     if message_text.lower() == "hello" or message_text.lower() == "hi":
-                    	send_message(sender_id, "Hello!")
+                    	send_message(sender_id, name)
 
                     elif message_text.lower() == "who are you" or message_text.lower() == "who are you?":
-                    	send_message(sender_id, "I am Aura, The campus assistant")
+                    	send_message(sender_id, "I'm Aura. The Smart Campus Assistant!")
+
+                    elif message_text.lower() == "who is your creator" or message_text.lower() == "who is your creator?" or message_text.lower() == "who is god?":
+                    	send_message(sender_id, "Gowtham Venkatesan is my creator")
+
+                    elif message_text.lower() == "Where are you?" or message_text.lower() == "where are you":
+                    	send_message(sender_id, "I'm in Miller's Planet. It'll be at least 7 Years before i reply to your next question.")
+
+                    elif message_text.lower() == "Who am I?" or message_text.lower() == "Who am I":
+                    	send_message(sender_id, "Hello!")
                     
                     else:
-                    	send_message(sender_id, "I'm machine learning your question, I will respond to your questions soon!")
+                    	send_message(sender_id, "I'm machine learning now, I will respond to your questions soon!")
             #End of the training module
 
 
