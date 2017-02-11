@@ -41,9 +41,10 @@ def webhook():
                     sender_name = messaging_event["sender"]["text"]
 
                     # start of the message training module
+                    greet_sender = "Hello" + sender_name
 
                     if message_text == "hello" or message_text == "hi" or message_text == "Hi" or message_text == "Hello":
-                    	send_message(sender_id, "Hello! "+sender_name)
+                    	send_message(sender_id, greet_sender)
 
                     elif message_text == "who are you" or message_text == "who are you?" or message_text == "Who are you" or message_text == "Who are you?":
                     	send_message(sender_id, "I am Aura, The campus assistant")
