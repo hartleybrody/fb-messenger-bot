@@ -65,16 +65,16 @@ def webhook():
                     elif message_text.lower() == "Where is the Xerox Shop ?" or message_text.lower() == "Xerox Shop":
                     	send_message(sender_id, "There are two xerox shops in PSG Tech. One in A-Block Room 203 and one in adjacent to J-block. Please ask around for directions.")
 
-                     elif message_text.lower() == "Where is the computer science department ?" or message_text.lower() == "Where is CSE" or message_text.lower() == "Where is the computer science department":
+                    elif message_text.lower() == "Where is the computer science department ?" or message_text.lower() == "Where is CSE" or message_text.lower() == "Where is the computer science department":
                     	send_message(sender_id, "The CSE Department is in the first floor of E-Block.")
 
-                     elif message_text.lower() == "Where can i get food?" or message_text.lower() == "Where can i get food" or message_text.lower() == "I'm Hungry":
+                    elif message_text.lower() == "Where can i get food?" or message_text.lower() == "Where can i get food" or message_text.lower() == "I'm Hungry":
                     	send_message(sender_id, "There is a canteen in F-Block. But if you want better food, you can head to the PSG Management College where you have plenty of options. Please cross using the Sky Walk for your own safety.")
 
                     elif message_text.lower() == "What up" or message_text.lower() == "What are you doing?" or message_text.lower() == "What are you doing":
                     	send_message(sender_id, "Nothing much. Just replying to your queries.")
 
-                     elif message_text.lower() == "What is your favourite colour?" or message_text.lower() == "What is your favourite colour" or message_text.lower() == "What is your favourite color" or message_text.lower() == "What's your favourite colour?"  or message_text.lower() == "What's your favourite colour"  or message_text.lower() == "What is your favourite color?":
+                    elif message_text.lower() == "What is your favourite colour?" or message_text.lower() == "What is your favourite colour" or message_text.lower() == "What is your favourite color" or message_text.lower() == "What's your favourite colour?"  or message_text.lower() == "What's your favourite colour"  or message_text.lower() == "What is your favourite color?":
                     	send_message(sender_id, "Neon Blue")
                     	if message_text.lower() == "Why?" or message_text.lower() == "Why":
                     		send_message(sender_id, "I like the Northern Lights.")
@@ -83,7 +83,7 @@ def webhook():
                     elif message_text.lower() == "I love You" or message_text.lower() == "that's smart" or message_text.lower() == "you are amazing" or message_text.lower() == "Good Job":
                     	send_message(sender_id, "Thank You!")
 
-                     elif message_text.lower() == "What is the 7th hour on Monday" or message_text.lower() == "What is the 7th hour on Monday?" or message_text.lower() == "What's the 7th hour on Monday?" or  message_text.lower() == "7th hour Monday":
+                    elif message_text.lower() == "What is the 7th hour on Monday" or message_text.lower() == "What is the 7th hour on Monday?" or message_text.lower() == "What's the 7th hour on Monday?" or  message_text.lower() == "7th hour Monday":
                     	send_message(sender_id, "You have Engineering Graphics.")
 
 
