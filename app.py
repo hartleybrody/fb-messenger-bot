@@ -47,10 +47,10 @@ def webhook():
                     if message_text.lower() == "hello" or message_text.lower() == "hi":
                     	send_message(sender_id, "Hello!")
 
-                    elif message_text.lower() == "who are you" or message_text.lower() == "who are you?":
+                    elif message_text.lower() == "who are you" or message_text.lower() == "who are you?" or message_text.lower() == "what are you?" message_text.lower() == "what are you":
                     	send_message(sender_id, "I'm Aura. The Smart Campus Assistant!")
 
-                    elif message_text.lower() == "who is your creator" or message_text.lower() == "who is your creator?" or message_text.lower() == "who is god?":
+                    elif message_text.lower() == "who is your creator" or message_text.lower() == "who is your creator?" or message_text.lower() == "who is god?" or message_text.lower() == "who built you?" or message_text.lower() == "who built you":
                     	send_message(sender_id, "Gowtham Venkatesan is my creator")
 
                     elif message_text.lower() == "Where are you?" or message_text.lower() == "where are you":
@@ -59,165 +59,40 @@ def webhook():
                     elif message_text.lower() == "Who am I?" or message_text.lower() == "Who am I":
                     	send_message(sender_id, "Hello!")
 
+                    elif message_text.lower() == "fuck" or message_text.lower() == "fucker" or message_text.lower() == "ass" or message_text.lower() == "pussy" or message_text.lower() == "nigga" or message_text.lower() == "dick":
+                    	send_message(sender_id, "Please mind your language!")
+
+                    elif message_text.lower() == "Where is the Xerox Shop ?" or message_text.lower() == "Xerox Shop":
+                    	send_message(sender_id, "There are two xerox shops in PSG Tech. One in A-Block Room 203 and one in adjacent to J-block. Please ask around for directions.")
+
+                     elif message_text.lower() == "Where is the computer science department ?" or message_text.lower() == "Where is CSE" or message_text.lower() == "Where is the computer science department":
+                    	send_message(sender_id, "The CSE Department is in the first floor of E-Block.")
+
+                     elif message_text.lower() == "Where can i get food?" or message_text.lower() == "Where can i get food" or message_text.lower() == "I'm Hungry":
+                    	send_message(sender_id, "There is a canteen in F-Block. But if you want better food, you can head to the PSG Management College where you have plenty of options. Please cross using the Sky Walk for your own safety.")
+
+                    elif message_text.lower() == "What up" or message_text.lower() == "What are you doing?" or message_text.lower() == "What are you doing":
+                    	send_message(sender_id, "Nothing much. Just replying to your queries.")
+
+                     elif message_text.lower() == "What is your favourite colour?" or message_text.lower() == "What is your favourite colour" or message_text.lower() == "What is your favourite color" or message_text.lower() == "What's your favourite colour?"  or message_text.lower() == "What's your favourite colour"  or message_text.lower() == "What is your favourite color?":
+                    	send_message(sender_id, "Neon Blue")
+                    	if message_text.lower() == "Why?" or message_text.lower() == "Why":
+                    		send_message(sender_id, "I like the Northern Lights.")
+
+
+                    elif message_text.lower() == "I love You" or message_text.lower() == "that's smart" or message_text.lower() == "you are amazing" or message_text.lower() == "Good Job":
+                    	send_message(sender_id, "Thank You!")
+
+                     elif message_text.lower() == "What is the 7th hour on Monday" or message_text.lower() == "What is the 7th hour on Monday?" or message_text.lower() == "What's the 7th hour on Monday?" or  message_text.lower() == "7th hour Monday":
+                    	send_message(sender_id, "You have Engineering Graphics.")
+
+
+
                     elif message_text.lower() == "Events" or message_text.lower() == "Event":
                     	send_message(sender_id, "Hello!")
 
-
-                    curl -X POST -H "Content-Type: application/json" -d ' { 
-  "recipient": {
-    "id": "USER_ID"
-  },
-  "message": {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "airline_boardingpass",
-        "intro_message": "You are checked in.",
-        "locale": "en_US",
-        "boarding_pass": [
-          {
-            "passenger_name": "SMITH\/NICOLAS",
-            "pnr_number": "CG4X7U",
-            "travel_class": "business",
-            "seat": "74J",
-            "auxiliary_fields": [
-              {
-                "label": "Terminal",
-                "value": "T1"
-              },
-              {
-                "label": "Departure",
-                "value": "30OCT 19:05"
-              }
-            ],
-            "secondary_fields": [
-              {
-                "label": "Boarding",
-                "value": "18:30"
-              },
-              {
-                "label": "Gate",
-                "value": "D57"
-              },
-              {
-                "label": "Seat",
-                "value": "74J"
-              },
-              {
-                "label": "Sec.Nr.",
-                "value": "003"
-              }
-            ],
-            "logo_image_url": "https:\/\/www.example.com\/en\/logo.png",
-            "header_image_url": "https:\/\/www.example.com\/en\/fb\/header.png",
-            "qr_code": "M1SMITH\/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
-            "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png",
-            "flight_info": {
-              "flight_number": "KL0642",
-              "departure_airport": {
-                "airport_code": "JFK",
-                "city": "New York",
-                "terminal": "T1",
-                "gate": "D57"
-              },
-              "arrival_airport": {
-                "airport_code": "AMS",
-                "city": "Amsterdam"
-              },
-              "flight_schedule": {
-                "departure_time": "2016-01-02T19:05",
-                "arrival_time": "2016-01-05T17:30"
-              }
-            }
-          },
-          {
-            "passenger_name": "JONES\/FARBOUND",
-            "pnr_number": "CG4X7U",
-            "travel_class": "business",
-            "seat": "74K",
-            "auxiliary_fields": [
-              {
-                "label": "Terminal",
-                "value": "T1"
-              },
-              {
-                "label": "Departure",
-                "value": "30OCT 19:05"
-              }
-            ],
-            "secondary_fields": [
-              {
-                "label": "Boarding",
-                "value": "18:30"
-              },
-              {
-                "label": "Gate",
-                "value": "D57"
-              },
-              {
-                "label": "Seat",
-                "value": "74K"
-              },
-              {
-                "label": "Sec.Nr.",
-                "value": "004"
-              }
-            ],
-            "logo_image_url": "https:\/\/www.example.com\/en\/logo.png",
-            "header_image_url": "https:\/\/www.example.com\/en\/fb\/header.png",
-            "qr_code": "M1JONES\/FARBOUND  CG4X7U nawouehgawgnapwi3jfa0wfh",
-            "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png",
-            "flight_info": {
-              "flight_number": "KL0642",
-              "departure_airport": {
-                "airport_code": "JFK",
-                "city": "New York",
-                "terminal": "T1",
-                "gate": "D57"
-              },
-              "arrival_airport": {
-                "airport_code": "AMS",
-                "city": "Amsterdam"
-              },
-              "flight_schedule": {
-                "departure_time": "2016-01-02T19:05",
-                "arrival_time": "2016-01-05T17:30"
-              }
-            }
-          }
-        ]
-      }
-    }
-  }
-}' 'https://graph.facebook.com/v2.6/me/messages?access_token=PAGE_ACCESS_TOKEN'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-                    else:
+					
+					else:
                     	send_message(sender_id, "I'm machine learning now, I will respond to your questions soon!")
             #End of the training module
 
