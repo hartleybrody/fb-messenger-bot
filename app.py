@@ -38,11 +38,10 @@ def webhook():
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
+
                     
 
                     # start of the message training module
-
-                   
 
                     if message_text.lower() == "hello" or message_text.lower() == "hi":
                     	send_message(sender_id, "Hello!")
@@ -79,20 +78,16 @@ def webhook():
                     	if message_text.lower() == "Why?" or message_text.lower() == "Why":
                     		send_message(sender_id, "I like the Northern Lights.")
 
-
                     elif message_text.lower() == "I love You" or message_text.lower() == "that's smart" or message_text.lower() == "you are amazing" or message_text.lower() == "Good Job":
                     	send_message(sender_id, "Thank You!")
 
                     elif message_text.lower() == "What is the 7th hour on Monday" or message_text.lower() == "What is the 7th hour on Monday?" or message_text.lower() == "What's the 7th hour on Monday?" or  message_text.lower() == "7th hour Monday":
                     	send_message(sender_id, "You have Engineering Graphics.")
 
-
-
                     elif message_text.lower() == "Events" or message_text.lower() == "Event":
                     	send_message(sender_id, "Hello!")
 
-					
-					else:
+                    else:
                     	send_message(sender_id, "I'm machine learning now, I will respond to your questions soon!")
             #End of the training module
 
