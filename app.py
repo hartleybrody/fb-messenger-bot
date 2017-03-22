@@ -7,6 +7,9 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+"""
+Shout out to Hartley Brody who developed a Python sample project for Facebook Messenger.
+"""
 
 @app.route('/', methods=['GET'])
 def verify():
