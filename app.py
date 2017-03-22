@@ -1,8 +1,9 @@
 import os
 import sys
 import json
-import kova
 import requests
+
+from kova import *
 from flask import Flask, request
 
 app = Flask(__name__)
