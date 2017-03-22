@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-
+import kova
 import requests
 from flask import Flask, request
 
@@ -42,7 +42,10 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    send_message(sender_id, "got it, thanks!")
+                    kova = Kova()
+                    response = kova.chat(message_text)
+
+                    send_message(sender_id, response)
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
