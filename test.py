@@ -4,7 +4,8 @@ import json
 from kova import *
 
 if __name__ == '__main__':
-    print "hi"
     kova = Kova()
-    response = kova.chat("hello")
-    print response
+    while(1):
+        message = raw_input('User: ')
+        response = kova.chat(message)
+        print 'Kova: ' + response

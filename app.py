@@ -21,7 +21,7 @@ def verify():
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
 
-    return "Hello world", 200
+    return "Lena Kova is developed by Junwon Park at Stanford University.", 200
 
 
 @app.route('/', methods=['POST'])
@@ -31,7 +31,7 @@ def webhook():
 
     data = request.get_json()
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
-
+    print data
     if data["object"] == "page":
 
         for entry in data["entry"]:
