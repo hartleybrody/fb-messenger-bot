@@ -8,5 +8,5 @@ class Kova:
         self.redis.set('test', 'test is success')
 
     def chat(self, input):
-        self.chapter += 1
+        #self.chapter += 1
         return self.redis.get('test')
