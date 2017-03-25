@@ -1,11 +1,14 @@
 import os
 import sys
 import json
+import redis
 import requests
 
 from kova import *
 from flask import Flask, request
 
+redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
+redis.set('users', [])
 app = Flask(__name__)
 
 """
@@ -42,11 +45,7 @@ def webhook():
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
-
-                    kova = Kova()
-                    response = kova.chat(message_text, sender_id)
-
-                    send_message(sender_id, response)
+                    process_message(message_text, sender_id)
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -59,6 +58,16 @@ def webhook():
 
     return "ok", 200
 
+def process_message(message_text, sender_id):
+    kova = Kova()
+    users = redis.get('users')
+    if sender_id not in users:
+        users.append(userid)
+        userinfo = {'chapter': 0}
+        redis.set(userid, userinfo)
+    userinfo = redis.get(userid)
+    response = kova.chat(message_text, userinfo)
+    send_message(sender_id, response)
 
 def send_message(recipient_id, message_text):
 
