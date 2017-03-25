@@ -12,6 +12,8 @@ class Kova:
         print self.redis.keys()
         if user_id not in self.redis.keys():
             userdata = {'count': 0}
+            print 'checkpoint'
+            print user_id
             self.redis.set(user_id, cPickle.dumps(userdata))
         userdata = cPickle.loads(self.redis.get(user_id))
         userdata['count'] += 1
