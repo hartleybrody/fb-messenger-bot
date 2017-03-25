@@ -44,7 +44,7 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     kova = Kova()
-                    response = kova.chat(message_text)
+                    response = kova.chat(message_text, sender_id)
 
                     send_message(sender_id, response)
 

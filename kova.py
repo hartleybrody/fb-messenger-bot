@@ -7,6 +7,8 @@ class Kova:
         self.redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
         self.redis.set('test', 'test is success')
 
-    def chat(self, input):
-        #self.chapter += 1
-        return self.redis.get('test')
+    def chat(self, input, userid):
+        if userid not in self.redis:
+            userinfo = {'count': 0}
+            self.redis.set(userid, userinfo)
+        return 'you messaged + ' + self.redis.get(userid)['count'] + ' times'
