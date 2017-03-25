@@ -10,5 +10,5 @@ class Kova:
     def chat(self, input, userid):
         if userid not in self.redis:
             userinfo = {'count': 0}
-            self.redis.set(userid, userinfo)
-        return 'you messaged + ' + self.redis.get(userid)['count'] + ' times'
+            self.redis.set(str(userid), userinfo)
+        return 'you messaged + ' + self.redis.get(str(userid))['count'] + ' times'
