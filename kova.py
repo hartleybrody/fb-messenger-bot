@@ -11,7 +11,7 @@ class Kova:
         if user_id not in self.redis.keys():
             userdata = {'count': 0}
             self.redis.set(user_id, cPickle.dumps(userdata))
-        userdata = cPickle.load(self.redis.get(user_id))
+        userdata = cPickle.loads(self.redis.get(user_id))
         userdata['count'] += 1
         self.redis.set(user_id, cPickle.dumps(userdata))
         return 'you messaged + ' + userdata['count'] + ' times'
