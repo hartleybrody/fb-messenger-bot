@@ -7,8 +7,8 @@ class Kova:
         self.redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
 
     def chat(self, input, user_id):
-        self.redis.hsetnx(user_id + 'chapter', 0)
-        chapter = self.redis.get(user_id + 'chapter')
+        self.redis.hsetnx('users', user_id + 'chapter', 0)
+        chapter = self.redis.hget('users', user_id + 'chapter')
         chapter += 1
-        self.redis.set(userid + 'chapter', chapter)
+        self.redis.hset('users', userid + 'chapter', chapter)
         return 'you messaged + ' + chapter + ' times'
