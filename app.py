@@ -8,7 +8,7 @@ from kova import *
 from flask import Flask, request
 
 redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
-redis.set('users', [])
+redis.set('users', ['junwon', 'andrew', 'dylan'])
 app = Flask(__name__)
 
 """
