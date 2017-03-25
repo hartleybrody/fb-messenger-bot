@@ -61,6 +61,7 @@ def webhook():
 def process_message(message_text, sender_id):
     kova = Kova()
     users = redis.get('users')
+    print users
     if sender_id not in users:
         users.append(userid)
         userinfo = {'chapter': 0}
