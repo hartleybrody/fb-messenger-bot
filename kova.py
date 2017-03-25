@@ -8,6 +8,8 @@ class Kova:
         self.redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
 
     def chat(self, input, user_id):
+        print 'redis keys '
+        print self.redis.keys()
         if user_id not in self.redis.keys():
             userdata = {'count': 0}
             self.redis.set(user_id, cPickle.dumps(userdata))
