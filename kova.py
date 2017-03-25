@@ -4,7 +4,7 @@ import redis
 class Kova:
 
     def __init__(self):
-        self.redis = redis.from_url(os.environ.get("REDIS_URL"))
+        self.redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
         self.redis.set('test', 'test is success')
 
     def chat(self, input):
