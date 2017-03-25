@@ -8,6 +8,8 @@ class Kova:
         self.redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
 
     def chat(self, input, user_id):
+        if input == 'redis flushall':
+            self.redis.flushall()
         if user_id not in self.redis.keys(): # if user first time talking
             initUser(user_id)
         user_data = self.getData(user_id)
