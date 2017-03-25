@@ -8,8 +8,7 @@ class Kova:
         self.redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
 
     def chat(self, input, user_id):
-        self.redis.flushall()
-        """print 'redis keys '
+        print 'redis keys '
         print self.redis.keys()
         if user_id not in self.redis.keys():
             userdata = {'count': 0}
@@ -18,5 +17,5 @@ class Kova:
             self.redis.set(user_id, cPickle.dumps(userdata))
         userdata = cPickle.loads(self.redis.get(user_id))
         userdata['count'] += 1
-        self.redis.set(user_id, cPickle.dumps(userdata))"""
+        self.redis.set(user_id, cPickle.dumps(userdata))
         return 'you messaged + ' + userdata['count'] + ' times'
