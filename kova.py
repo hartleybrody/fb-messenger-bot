@@ -1,9 +1,7 @@
-import os
-import redis
-
 class Kova:
 
     def __init__(self):
+        self.name = 'Lena Kova'
 
     def chat(self, input, userinfo):
         chapter = userinfo['chapter']
