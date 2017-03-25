@@ -18,4 +18,4 @@ class Kova:
         userdata = cPickle.loads(self.redis.get(user_id))
         userdata['count'] += 1
         self.redis.set(user_id, cPickle.dumps(userdata))
-        return 'you messaged + ' + userdata['count'] + ' times'
+        return 'you messaged + ' + str(userdata['count']) + ' times'
