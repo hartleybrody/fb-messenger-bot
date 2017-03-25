@@ -1,14 +1,11 @@
 import os
 import sys
 import json
-import redis
 import requests
 
 from kova import *
 from flask import Flask, request
 
-redis = redis.from_url(os.environ.get("REDISCLOUD_URL"))
-redis.set('users', ['junwon', 'andrew', 'dylan'])
 app = Flask(__name__)
 
 """
@@ -60,14 +57,7 @@ def webhook():
 
 def process_message(message_text, sender_id):
     kova = Kova()
-    users = redis.get('users')
-    print users
-    if sender_id not in users:
-        users.append(userid)
-        userinfo = {'chapter': 0}
-        redis.set(userid, userinfo)
-    userinfo = redis.get(userid)
-    response = kova.chat(message_text, userinfo)
+    response = kova.chat(message_text, sender_id)
     send_message(sender_id, response)
 
 def send_message(recipient_id, message_text):
