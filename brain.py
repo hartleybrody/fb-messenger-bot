@@ -5,20 +5,10 @@ def process_message(message_payload, message_type):
 
     if message_payload.lower() in greetings:
         responses.append("Hello there!")
-        responses.append(dict(
-                text="What can I help you with today?",
-                quick_replies=[
-                    dict(label="Store Hours", value="hours"),
-                    dict(label="Location", value="location"),
-                ]
-            ))
+        responses.append(dict(text="In order to better assist you, we'll need your location", get_location=True))
 
     if message_type == "quick_reply":
-        if message_payload == "hours":
-            responses.append("Our store hours are Monday through Friday, from 9am to 6pm.")
-
-        if message_payload == "location":
-            responses.append("We are located in the middle of downtown.")
+        responses.append("You are located at {}".format(message_payload))
 
 
     return responses
