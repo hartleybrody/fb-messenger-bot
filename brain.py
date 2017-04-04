@@ -1,2 +1,16 @@
+greetings = ["hello", "hi", "get started"]
+
 def process_message(message_payload, message_type):
-    return "Roger that! v2"
+    responses = []
+
+    if message_payload.lower() in greetings:
+        responses.append("Hello there!")
+        responses.append(dict(
+                text="What can I help you with today?",
+                quick_replies=[
+                    dict(label="Store Hours", value="hours"),
+                    dict(label="Location", value="location"),
+                ]
+            ))
+
+    return responses
