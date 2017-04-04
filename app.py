@@ -39,13 +39,18 @@ def webhook():
 
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
 
-                    if messaging_event["message"].get("text"):  # they sent us a text message
+                    if messaging_event["message"].get("text"):  # they sent a text message
                         message_body = messaging_event["message"].get("text")
                         message_type = "text"
 
-                    if messaging_event["message"].get("quick_reply"):  # they sent us a quick reply
+                    if messaging_event["message"].get("quick_reply"):  # they sent a quick reply
                         message_body = messaging_event["message"]["quick_reply"]["payload"]
                         message_type = "quick_reply"
+
+                    if messaging_event["message"].get("attachments"):  # they sent an attachment
+                        if messaging_event["message"]["attachments"][0]["type"] == "location":  # they sent a location
+                            message_body = json.dumps(messaging_event["message"]["attachments"][0]["payload"])
+                            message_type = "location"
 
                     log("Got a {} message from {}: {}".format(message_type, sender_id, message_body))
                     responses = process_message(message_body, message_type)
