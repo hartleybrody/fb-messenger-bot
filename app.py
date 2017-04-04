@@ -40,9 +40,15 @@ def webhook():
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    response = process_message(message_text, "text")
+                    responses = process_message(message_text, "text")
 
-                    send_message(sender_id, response)
+                    # convert responses to a list, if not already
+                    if type(responses) is not list:
+                        responses = [responses]
+
+                    for response in responses:
+                        msg = build_message(response)
+                        send_message(sender_id, msg)
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -56,9 +62,22 @@ def webhook():
     return "ok", 200
 
 
-def send_message(recipient_id, message_text):
+def build_message(response):
+    if type(response) is str or type(response) is unicode:
+        return dict(text=response)
 
-    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
+    if type(response) == dict and "quick_replies" in response.keys():
+        buttons = [dict(content_type="text", title=b["label"], payload=b["value"]) for b in response["quick_replies"]]
+        return dict(text=response["text"], quick_replies=buttons)
+
+    else:
+        print response
+        raise Exception("Don't know how to send a message like that")
+
+
+def send_message(recipient_id, message_data):
+
+    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_data))
 
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
@@ -70,9 +89,7 @@ def send_message(recipient_id, message_text):
         "recipient": {
             "id": recipient_id
         },
-        "message": {
-            "text": message_text
-        }
+        "message": message_data
     })
     r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
     if r.status_code != 200:
