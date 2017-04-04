@@ -76,6 +76,9 @@ def build_message(response):
         buttons = [dict(content_type="text", title=b["label"], payload=b["value"]) for b in response["quick_replies"]]
         return dict(text=response["text"], quick_replies=buttons)
 
+    if type(response) == dict and "get_location" in response.keys():
+        return dict(text=response["text"], quick_replies=[dict(content_type="location")])
+
     else:
         print response
         raise Exception("Don't know how to send a message like that")
