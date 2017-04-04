@@ -1,5 +1,3 @@
-import json
-
 greetings = ["hello", "hi", "get started"]
 
 def process_message(message_payload, message_type):
@@ -7,14 +5,20 @@ def process_message(message_payload, message_type):
 
     if message_payload.lower() in greetings:
         responses.append("Hello there!")
-        responses.append(dict(text="In order to find nearby cafes, we'll need your location", get_location=True))
+        responses.append(dict(
+                text="What can I help you with today?",
+                quick_replies=[
+                    dict(label="Store Hours", value="hours"),
+                    dict(label="Location", value="location"),
+                ]
+            ))
 
-    if message_type == "location":
-        coordinates = json.loads(message_payload)["coordinates"]
-        lat = coordinates["lat"]
-        lon = coordinates["long"]
-        responses.append("Here's a link with a map to nearby cafes:")
-        responses.append("https://www.google.com/maps/search/cafe/@{},{},15z/data=!3m1!4b1".format(lat, lon))
+    if message_type == "quick_reply":
+        if message_payload == "hours":
+            responses.append("Our store hours are Monday through Friday, from 9am to 6pm.")
+
+        if message_payload == "location":
+            responses.append("We are located in the middle of downtown.")
 
 
     return responses

@@ -47,11 +47,6 @@ def webhook():
                         message_body = messaging_event["message"]["quick_reply"]["payload"]
                         message_type = "quick_reply"
 
-                    if messaging_event["message"].get("attachments"):  # they sent an attachment
-                        if messaging_event["message"]["attachments"][0]["type"] == "location":  # they sent a location
-                            message_body = json.dumps(messaging_event["message"]["attachments"][0]["payload"])
-                            message_type = "location"
-
                     log("Got a {} message from {}: {}".format(message_type, sender_id, message_body))
                     responses = process_message(message_body, message_type)
 
@@ -82,9 +77,6 @@ def build_message(response):
     if type(response) == dict and "quick_replies" in response.keys():
         buttons = [dict(content_type="text", title=b["label"], payload=b["value"]) for b in response["quick_replies"]]
         return dict(text=response["text"], quick_replies=buttons)
-
-    if type(response) == dict and "get_location" in response.keys():
-        return dict(text=response["text"], quick_replies=[dict(content_type="location")])
 
     else:
         print response
