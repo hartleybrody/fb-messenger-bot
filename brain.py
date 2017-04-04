@@ -14,6 +14,11 @@ def process_message(message_payload, message_type):
             ))
 
     if message_type == "quick_reply":
-        responses.append("You clicked a Quick Reply button")
+        if message_payload == "hours":
+            responses.append("Our store hours are Monday through Friday, from 9am to 6pm.")
+
+        if message_payload == "location":
+            responses.append("We are located in the middle of downtown.")
+
 
     return responses
