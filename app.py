@@ -38,9 +38,15 @@ def webhook():
                 if messaging_event.get("message"):  # someone sent us a message
 
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
-                    message_text = messaging_event["message"]["text"]  # the message's text
 
-                    responses = process_message(message_text, "text")
+                    message_text = messaging_event["message"]["text"]  # the message's text
+                    message_type = "text"
+
+                    if messaging_event["message"].get("quick_reply"):  # override w quick_reply payload
+                        message_text = messaging_event["message"]["quick_reply"]["payload"]
+                        message_type = "quick_reply"
+
+                    responses = process_message(message_text, message_type)
 
                     # convert responses to a list, if not already
                     if type(responses) is not list:

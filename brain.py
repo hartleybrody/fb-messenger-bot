@@ -13,4 +13,7 @@ def process_message(message_payload, message_type):
                 ]
             ))
 
+    if message_type == "quick_reply":
+        responses.append("You clicked a Quick Reply button")
+
     return responses
