@@ -53,7 +53,7 @@ def webhook():
                             message_type = "location"
 
                     log("Got a {} message from {}: {}".format(message_type, sender_id, message_body))
-                    responses = process_message(message_body, message_type)
+                    responses = process_message(message_body, message_type, sender_id)
 
                     # convert responses to a list, if not already
                     if type(responses) is not list:
