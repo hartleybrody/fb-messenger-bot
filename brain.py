@@ -14,7 +14,7 @@ def process_message(message_payload, message_type, sender_id):
         responses.append(dict(
             text="What sort of coffehouse are you looking for?",
             quick_replies=[
-                dict(label="Dunkin Donuts", value="dunkin donuts"),
+                dict(label="Dunkin Donuts", value="dunkin+donuts"),
                 dict(label="Starbucks", value="starbucks"),
                 dict(label="Local Cafe", value="cafe"),
             ]))
