@@ -8,6 +8,13 @@ from flask import Flask, request
 
 app = Flask(__name__)
 bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
+candyDict = {
+    'jolly rancher':100,
+    'snickers':5,
+    'M&M':3,
+    'Twix':1,
+    'Hershey':0
+}
 
 
 @app.route('/', methods=['GET'])
@@ -41,6 +48,8 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
+                    if message_text in candyDict:
+                        candyDict[message_text]-=
                     #log(bot.get_user_info(sender_id))
                     bot.send_text_message(sender_id, "roger that!")
                     send_quick_reply(sender_id, {})
@@ -59,20 +68,17 @@ def webhook():
 def send_quick_reply(recipient_id, options):
 
     options = {
-        "text":"Pick a color:",
-        "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"Red",
-            "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
-          },
-          {
-            "content_type":"text",
-            "title":"Green",
-            "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
-          }
-        ]
+        "text":"Thank you for picking underwear gnomes candy\nPick a candy:",
+        "quick_replies":[]
     }
+    for key, value in candyDict:
+        if value > 0:
+            options['quick_replies'].append({
+                "content_type":"text",
+                "title":key,
+                "image_url":"http://petersfantastichats.com/img/red.png"
+          }
+        )
 
     bot.send_message(recipient_id, options)
 
