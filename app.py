@@ -49,7 +49,7 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     if message_text in candyDict:
-                        candyDict[message_text]-=
+                        candyDict[message_text] -= candyDict[message_text]
                     #log(bot.get_user_info(sender_id))
                     bot.send_text_message(sender_id, "roger that!")
                     send_quick_reply(sender_id, {})
