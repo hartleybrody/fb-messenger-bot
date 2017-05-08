@@ -51,30 +51,30 @@ def webhook():
                 if messaging_event.get("optin"):  # optin confirmation
                     pass
 
-                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
+                if messaging_event.get("postback") or messaging_event.get("referral"):  # user clicked/tapped "postback" button in earlier message
                     send_quick_reply(sender_id, {})
 
     return "ok", 200
 
-    def send_quick_reply(recipient_id, options):
+def send_quick_reply(recipient_id, options):
 
-        options = {
-            "text":"Pick a color:",
-            "quick_replies":[
-              {
-                "content_type":"text",
-                "title":"Red",
-                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
-              },
-              {
-                "content_type":"text",
-                "title":"Green",
-                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
-              }
-            ]
-        }
+    options = {
+        "text":"Pick a color:",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Red",
+            "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+          },
+          {
+            "content_type":"text",
+            "title":"Green",
+            "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
+          }
+        ]
+    }
 
-        bot.send_message(recipient_id, options)
+    bot.send_message(recipient_id, options)
 
 
 def send_message(recipient_id, message_text):
