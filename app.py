@@ -43,6 +43,7 @@ def webhook():
 
                     log(bot.get_user_info(sender_id))
                     bot.send_text_message(sender_id, "roger that!")
+                    bot.send_quick_reply(sender_id, {})
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
