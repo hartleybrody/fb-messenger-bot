@@ -43,7 +43,7 @@ def webhook():
 
                     #log(bot.get_user_info(sender_id))
                     bot.send_text_message(sender_id, "roger that!")
-                    bot.send_quick_reply(sender_id, {})
+                    send_quick_reply(sender_id, {})
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -52,7 +52,7 @@ def webhook():
                     pass
 
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
-                    pass
+                    send_quick_reply(sender_id, {})
 
     return "ok", 200
 
