@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from bot import Bot
+from pymessenger.bot import Bot
 
 import requests
 from flask import Flask, request
@@ -41,8 +41,8 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
+                    log(bot.get_user_info(sender_id))
                     bot.send_text_message(sender_id, "roger that!")
-                    bot.send_receipt_message(sender_id)
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -54,6 +54,26 @@ def webhook():
                     pass
 
     return "ok", 200
+
+    def send_quick_reply(recipient_id, options):
+
+        options = {
+            "text":"Pick a color:",
+            "quick_replies":[
+              {
+                "content_type":"text",
+                "title":"Red",
+                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+              },
+              {
+                "content_type":"text",
+                "title":"Green",
+                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
+              }
+            ]
+        }
+
+        bot.send_message(recipient_id, options)
 
 
 def send_message(recipient_id, message_text):
