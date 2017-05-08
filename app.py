@@ -1,11 +1,14 @@
 import os
 import sys
 import json
+from pymessenger.bot import Bot
 
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
+
+bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
 
 
 @app.route('/', methods=['GET'])
@@ -39,7 +42,7 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    send_message(sender_id, "roger that!")
+                    bot.send_text_message(sender_id, "roger that!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
