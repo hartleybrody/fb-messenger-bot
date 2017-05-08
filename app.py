@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from pymessenger.bot import Bot
+from bot import Bot
 
 import requests
 from flask import Flask, request
@@ -42,6 +42,7 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     bot.send_text_message(sender_id, "roger that!")
+                    bot.send_receipt_message(sender_id)
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass

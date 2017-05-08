@@ -7,4 +7,6 @@ gunicorn==19.6.0
 itsdangerous==0.24
 requests==2.10.0
 wsgiref==0.1.2
-pymessenger
+enum
+requests-toolbelt
+six
