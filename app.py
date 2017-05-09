@@ -71,8 +71,8 @@ def send_quick_reply(recipient_id, options):
         "text":"Thank you for picking underwear gnomes candy\nPick a candy:",
         "quick_replies":[]
     }
-    for key, value in candyDict:
-        if value > 0:
+    for key in candyDict:
+        if candyDict[key] > 0:
             options['quick_replies'].append({
                 "content_type":"text",
                 "title":key,
