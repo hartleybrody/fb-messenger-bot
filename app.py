@@ -80,7 +80,7 @@ def send_quick_reply(recipient_id, options):
                 "content_type":"text",
                 "title":key,
                 "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED",
-                "image_url":"https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.hersheys.com%2Fis%2Fimage%2Fcontent%2Fdam%2Fjolly-rancher%2Fen_us%2Fimages%2Fhome%2F16x9_GreenApple_Hero_JollyRancher.jpg%3Fhei%3D320%26wid%3D570%26fmt%3Dpng-alpha&imgrefurl=https%3A%2F%2Fwww.hersheys.com%2Fjolly-rancher%2Fen_us%2Fproducts%2Ffruity-bash.html&docid=MRlnRx5GcJ05hM&tbnid=Ei9HJPf1FO23EM%3A&vet=10ahUKEwjsvInb5uHTAhWl5IMKHfg1AWwQMwhkKAMwAw..i&w=570&h=320&safe=off&bih=714&biw=1440&q=jolly%20rancher&ved=0ahUKEwjsvInb5uHTAhWl5IMKHfg1AWwQMwhkKAMwAw&iact=mrc&uact=8"
+                "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
             })
 
     log(options)
