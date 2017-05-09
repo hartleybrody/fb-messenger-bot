@@ -72,7 +72,10 @@ def send_quick_reply(recipient_id, options):
         "quick_replies":[]
     }
     for key in candyDict:
+        log(candyDict)
         if candyDict[key] > 0:
+            log(candyDict[key])
+            log(key)
             options['quick_replies'].append({
                 "content_type":"text",
                 "title":key,
