@@ -50,6 +50,8 @@ def webhook():
 
                     if message_text in candyDict and candyDict[message_text] > 0:
                         candyDict[message_text] = candyDict[message_text] - 1
+                        log("Decrementing candyDict" + message_text)
+                        log(candyDict[message_text])
                     #log(bot.get_user_info(sender_id))
                     #bot.send_text_message(sender_id, "roger that!")
                     send_quick_reply(sender_id, {})
