@@ -9,11 +9,11 @@ from flask import Flask, request
 app = Flask(__name__)
 bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
 candyDict = {
-    'jolly rancher':100,
-    'snickers':5,
-    'M&M':3,
-    'Twix':1,
-    'Hershey':0
+    "jolly rancher":100,
+    "snickers":5,
+    "M&M":3,
+    "Twix":1,
+    "Hershey":0
 }
 
 
