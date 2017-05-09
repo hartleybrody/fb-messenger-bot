@@ -7,7 +7,7 @@ import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
+bot = {}#Bot(os.environ["PAGE_ACCESS_TOKEN"])
 candyDict = {
     "jolly rancher":100,
     "snickers":5,
@@ -51,7 +51,7 @@ def webhook():
                     if message_text in candyDict:
                         candyDict[message_text] -= candyDict[message_text]
                     #log(bot.get_user_info(sender_id))
-                    bot.send_text_message(sender_id, "roger that!")
+                    #bot.send_text_message(sender_id, "roger that!")
                     send_quick_reply(sender_id, {})
 
                 if messaging_event.get("delivery"):  # delivery confirmation
@@ -79,11 +79,12 @@ def send_quick_reply(recipient_id, options):
             options['quick_replies'].append({
                 "content_type":"text",
                 "title":key,
+                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED",
                 "image_url":"http://petersfantastichats.com/img/red.png"
-          }
-        )
+            })
 
-    bot.send_message(recipient_id, options)
+    log(options)
+    #bot.send_message(recipient_id, options)
 
 
 def send_message(recipient_id, message_text):
