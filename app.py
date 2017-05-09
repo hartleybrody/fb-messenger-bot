@@ -7,7 +7,7 @@ import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-bot = {}#Bot(os.environ["PAGE_ACCESS_TOKEN"])
+bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
 candyDict = {
     "jolly rancher":100,
     "snickers":5,
@@ -84,7 +84,7 @@ def send_quick_reply(recipient_id, options):
             })
 
     log(options)
-    #bot.send_message(recipient_id, options)
+    bot.send_message(recipient_id, options)
 
 
 def send_message(recipient_id, message_text):
