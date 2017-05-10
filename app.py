@@ -114,7 +114,7 @@ def webhook():
 
     return "ok", 200
 
-@app.route('/solicit-review', methods=['POST'])
+@app.route('/solicit-review', methods=['GET'])
 def solicit_review():
     sender_id = request.args.get('senderId')
     candy = request.args.get('candy')
@@ -124,31 +124,31 @@ def solicit_review():
     quick_replies = [
         {
             "content_type":"text",
-            "title":"Gross",
+            "title":"1",
             "payload":"1",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
-            "title":"Not good",
+            "title":"2",
             "payload":"2",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
-            "title":"Meh",
+            "title":"3",
             "payload":"3",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
-            "title":"Good, not great",
+            "title":"4",
             "payload":"4",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
-            "title":"Great",
+            "title":"5",
             "payload":"5",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         }
