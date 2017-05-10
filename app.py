@@ -77,7 +77,8 @@ def webhook():
                             Items = [candyDb]
                         )
                         log("Posting to bother Oren")
-                        #r = requests.post("https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/iimhlox1ml/resources/bgfbzu", data=candyDict)
+                        r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=candyDict)
+                        log(r)
 
                     #log(bot.get_user_info(sender_id))
                     #bot.send_text_message(sender_id, "roger that!")
