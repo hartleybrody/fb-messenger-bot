@@ -55,7 +55,8 @@ def webhook():
                     }
 
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
-                    if "Text" in messaging_event["message"]:
+                    log(messaging_event["message"])
+                    if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
 
                         if message_text in candyDict:
