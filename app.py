@@ -9,6 +9,8 @@ from flask import Flask, request
 
 app = Flask(__name__)
 bot = Bot("EAAD0GgditLsBAEOaCmRSpSHZCcer6BsGNizdj0KPiodpsNWK1a76s9GBDfiUk5uPVWKqOdEM3WnAeJSGQs68tYA4obE56pRCr7GvQr1B7E6W6giAxEIQxZBA7ZA0HVkrtoj3NiOHT1JZCqvDzRcfFVfk87MbVWpowF0H1mEOogZDZD")#Bot(os.environ["PAGE_ACCESS_TOKEN"])
+#accessKey = os.environ["ACCESS_KEY"]
+#secretKey = os.environ["SECRET_KEY"]
 candyDict = {
     "jolly rancher":100,
     "snickers":5,
