@@ -95,29 +95,18 @@ def webhook():
                                 DomainName = domainName,
                                 Items = [candyDb]
                             )
-                            log(response["Attributes"])
-                            candy_found = False
-                            for candy in response["Attributes"]:
-                                log(candy)
-                                if candy["Name"].lower() == message_text.lower():
-                                    candy_found = True
-                                    log(candy["Value"])
-                                    candy["Value"] =  str(int(candy["Value"]) - 1)
-                                    log(candy["Value"])
-                                    candy["Replace"] = True
-                                    log(candy)
-                            if candy_found:
-                                log(response["Attributes"])
-                                candyDb["Attributes"] = response["Attributes"]
-                                sdb.batch_put_attributes(
-                                    DomainName = domainName,
-                                    Items = [candyDb]
-                                )
-                                log("Posting to bother Oren")
-                                user_info = get_user_info(sender_id)
-                                candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
-                                r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
-                                send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but legally distinct from Jimmy John's) delivery")
+                            log("Posting to bother Oren")
+                            user_info = get_user_info(sender_id)
+                            candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
+                            r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
+                            send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but legally distinct from Jimmy John's) delivery")
+                        else:
+                            if RepresentsInt(message_text) :
+                                starRating = int(message_text)
+                                if starRating < 4:
+                                    send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
+                                else:
+                                    send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!"
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -259,6 +248,14 @@ def send_candy_options(recipient_id, category):
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
     sys.stdout.flush()
+
+def RepresentsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 
 
 if __name__ == '__main__':
