@@ -10,12 +10,22 @@ from flask import Flask, request
 app = Flask(__name__)
 bot = Bot("EAAD0GgditLsBAEOaCmRSpSHZCcer6BsGNizdj0KPiodpsNWK1a76s9GBDfiUk5uPVWKqOdEM3WnAeJSGQs68tYA4obE56pRCr7GvQr1B7E6W6giAxEIQxZBA7ZA0HVkrtoj3NiOHT1JZCqvDzRcfFVfk87MbVWpowF0H1mEOogZDZD")#Bot(os.environ["PAGE_ACCESS_TOKEN"])
 
-candyDict = {
-    "jolly rancher":100,
-    "snickers":5,
-    "M&M":3,
-    "Twix":1,
-    "Hershey":0
+chocolateDict = {
+    "snickers",
+    "M&M",
+    "Twix",
+    "Hershey"
+}
+
+fruityDict = {
+    "jolly rancher",
+    "fruit loops",
+    "fruity pebbles"
+}
+
+candyCategory = {
+    "chocolate": chocolateDict,
+    "fruity": fruityDict
 }
 
 sdb = boto3.client('sdb')
@@ -59,7 +69,11 @@ def webhook():
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
 
-                        if message_text in candyDict:
+                        if message_text in candyCategory:
+                            send_candy_options(sender_id, message_text)
+                            return "ok", 200
+
+                        if "payload" in messaging_event["message"]:
                             response = sdb.get_attributes(
                                 DomainName = domainName,
                                 ItemName = 'candy'
@@ -71,6 +85,8 @@ def webhook():
                                     log(candy["Value"])
                                     candy["Value"] =  str(int(candy["Value"]) - 1)
                                     log(candy["Value"])
+                                    candy["Replace"] = True
+                                    log(candy)
 
                             log(response["Attributes"])
                             candyDb["Attributes"] = response["Attributes"]
@@ -81,12 +97,9 @@ def webhook():
                             log("Posting to bother Oren")
                             user_info = get_user_info(sender_id)
                             candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
-                            r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
-                            log(r)
-
-                    #log(bot.get_user_info(sender_id))
-                    #bot.send_text_message(sender_id, "roger that!")
-                    send_quick_reply(sender_id, {})
+                            #r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
+                            #log(r)
+                            send_quick_reply(sender_id, {})
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -159,17 +172,16 @@ def send_quick_reply(recipient_id, options):
         greeting += "miss " + info["last_name"]
 
     options = {
-        "text": greeting + "\nThank you for picking SCRUBS candy\nPick a candy:",
+        "text": greeting + "\nThank you for picking SCRUBS candy\nPick a candy category you'd like to choose from:",
         "quick_replies":[]
     }
-    for key in candyDict:
-        if candyDict[key] > 0:
-            options['quick_replies'].append({
-                "content_type":"text",
-                "title":key,
-                "payload":"candyDict",
-                "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
-            })
+    for key in candyCategory:
+        options['quick_replies'].append({
+            "content_type":"text",
+            "title":key,
+            "payload":key,
+            "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
+        })
 
     log("You should get a message")
     bot.send_message(recipient_id, options)
@@ -198,6 +210,22 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
+def send_candy_options(recipient_id, category):
+
+
+    options = {
+        "text": "Choose yo candy",
+        "quick_replies":[]
+    }
+    for key in candyCategory[category]:
+        options['quick_replies'].append({
+            "content_type":"text",
+            "title":key,
+            "payload":category,
+            "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
+        })
+    log("You should get a message")
+    bot.send_message(recipient_id, options)
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
