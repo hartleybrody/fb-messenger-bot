@@ -79,7 +79,8 @@ def webhook():
                                 Items = [candyDb]
                             )
                             log("Posting to bother Oren")
-                            r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(data))
+                            candy_request = {"senderId": sender_id, "choice": message_text, "name": "TODO"}
+                            r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                             log(r)
 
                     #log(bot.get_user_info(sender_id))
