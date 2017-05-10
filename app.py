@@ -1,13 +1,14 @@
 import os
 import sys
 import json
+#import boto3
 from pymessenger.bot import Bot
 
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
+bot = Bot("EAAD0GgditLsBAEOaCmRSpSHZCcer6BsGNizdj0KPiodpsNWK1a76s9GBDfiUk5uPVWKqOdEM3WnAeJSGQs68tYA4obE56pRCr7GvQr1B7E6W6giAxEIQxZBA7ZA0HVkrtoj3NiOHT1JZCqvDzRcfFVfk87MbVWpowF0H1mEOogZDZD")#Bot(os.environ["PAGE_ACCESS_TOKEN"])
 candyDict = {
     "jolly rancher":100,
     "snickers":5,
@@ -16,6 +17,9 @@ candyDict = {
     "Hershey":0
 }
 
+#sdb = boto3.client('sdb')
+
+#domainName = 'steven.hernandez'
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -49,9 +53,9 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     if message_text in candyDict and candyDict[message_text] > 0:
-                        candyDict[message_text] = candyDict[message_text] - 1
-                        log("Decrementing candyDict" + message_text)
-                        log(candyDict[message_text])
+                        candyDict = messaging_event["message"]["payload"]
+                        r = requests.post("https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/iimhlox1ml/resources/bgfbzu", data=candyDict)
+
                     #log(bot.get_user_info(sender_id))
                     #bot.send_text_message(sender_id, "roger that!")
                     send_quick_reply(sender_id, {})
@@ -81,7 +85,7 @@ def send_quick_reply(recipient_id, options):
             options['quick_replies'].append({
                 "content_type":"text",
                 "title":key,
-                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED",
+                "payload":candyDict,
                 "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
             })
 
