@@ -212,18 +212,29 @@ def send_message(recipient_id, message_text):
 
 def send_candy_options(recipient_id, category):
 
+    response = sdb.get_attributes(
+        DomainName = domainName,
+        ItemName = 'candy'
+    )
+    candyAmount = 0
+    candyDict = {}
+    for candy in response["Attributes"]:
+        candyDict[candy["Name"].lower()] = candy["Value"]
 
     options = {
         "text": "Choose yo candy",
         "quick_replies":[]
     }
+
     for key in candyCategory[category]:
-        options['quick_replies'].append({
-            "content_type":"text",
-            "title":key,
-            "payload":category,
-            "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
-        })
+        log(candyDict[key.lower()])
+        if int(candyDict[key.lower()].lower()) > 0:
+            options['quick_replies'].append({
+                "content_type":"text",
+                "title":key,
+                "payload":category,
+                "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
+            })
     log("You should get a message")
     bot.send_message(recipient_id, options)
 
