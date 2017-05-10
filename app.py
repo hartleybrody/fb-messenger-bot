@@ -101,7 +101,7 @@ def webhook():
                                 candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                                 r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                                 #log(r)
-                                send_quick_reply(sender_id, {})
+                                #send_quick_reply(sender_id, {})
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
