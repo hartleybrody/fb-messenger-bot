@@ -101,12 +101,12 @@ def webhook():
                             r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                             send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but legally distinct from Jimmy John's) delivery")
                         else:
-                            if RepresentsInt(message_text) :
+                            if RepresentsInt(message_text):
                                 starRating = int(message_text)
                                 if starRating < 4:
                                     send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
                                 else:
-                                    send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!"
+                                    send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
