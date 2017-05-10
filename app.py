@@ -79,7 +79,8 @@ def webhook():
                                 Items = [candyDb]
                             )
                             log("Posting to bother Oren")
-                            candy_request = {"senderId": sender_id, "choice": message_text, "name": "TODO"}
+                            user_info = get_user_info(sender_id)
+                            candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                             r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                             log(r)
 
@@ -98,6 +99,48 @@ def webhook():
                     log(messaging_event)
                     send_quick_reply(sender_id, {})
 
+    return "ok", 200
+
+@app.route('/solicit-review', methods=['POST'])
+def solicit_review():
+    sender_id = request.args.get('senderId')
+    candy = request.args.get('candy')
+    user_info = get_user_info(sender_id)
+    request_message = "Hello " + user_info["first_name"] + ",\nHow would you rate your " + candy + "?"
+    log("Request message: " + request_message)
+    quick_replies = [
+        {
+            "content_type":"text",
+            "title":"Gross",
+            "payload":"1",
+            "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
+        },
+        {
+            "content_type":"text",
+            "title":"Not good",
+            "payload":"2",
+            "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
+        },
+        {
+            "content_type":"text",
+            "title":"Meh",
+            "payload":"3",
+            "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
+        },
+        {
+            "content_type":"text",
+            "title":"Good, not great",
+            "payload":"4",
+            "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
+        },
+        {
+            "content_type":"text",
+            "title":"Great",
+            "payload":"5",
+            "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
+        }
+    ]
+    bot.send_message(sender_id, {"text": request_message, "quick_replies": quick_replies})
     return "ok", 200
 
 def get_user_info(sender_id):
@@ -137,7 +180,7 @@ def send_message(recipient_id, message_text):
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
+        "access_token": "EAAD0GgditLsBAEOaCmRSpSHZCcer6BsGNizdj0KPiodpsNWK1a76s9GBDfiUk5uPVWKqOdEM3WnAeJSGQs68tYA4obE56pRCr7GvQr1B7E6W6giAxEIQxZBA7ZA0HVkrtoj3NiOHT1JZCqvDzRcfFVfk87MbVWpowF0H1mEOogZDZD"
     }
     headers = {
         "Content-Type": "application/json"
