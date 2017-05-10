@@ -1,16 +1,16 @@
 import os
 import sys
 import json
+import boto3
 from pymessenger.bot import Bot
 
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-bot = Bot("EAAD0GgditLsBAEOaCmRSpSHZCcer6BsGNizdj0KPiodpsNWK1a76s9GBDfiUk5uPVWKqOdEM3WnAeJSGQs68tYA4obE56pRCr7GvQr1B7E6W6giAxEIQxZBA7ZA0HVkrtoj3NiOHT1JZCqvDzRcfFVfk87MbVWpowF0H1mEOogZDZD")#Bot(os.environ["PAGE_ACCESS_TOKEN"])
-#accessKey = os.environ["ACCESS_KEY"]
-#secretKey = os.environ["SECRET_KEY"]
-
+bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
+accessKey = os.environ["ACCESS_KEY"]
+secretKey = os.environ["SECRET_KEY"]
 candyDict = {
     "jolly rancher":100,
     "snickers":5,
@@ -19,9 +19,9 @@ candyDict = {
     "Hershey":0
 }
 
-#sdb = boto3.client('sdb')
+sdb = boto3.client('sdb')
 
-#domainName = 'steven.hernandez'
+domainName = 'steven.hernandez'
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -50,13 +50,32 @@ def webhook():
                 sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
 
                 if messaging_event.get("message"):  # someone sent us a message
+                    candyDb = {
+                        'Name': 'candy',
+                        'Attributes': []
+                    }
 
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     if message_text in candyDict and candyDict[message_text] > 0:
-                        global candyDict
-                        candyDict = messaging_event["message"]["payload"]
+                        response = sdb.get_attributes(
+                            DomainName = domainName,
+                            ItemName = 'candy'
+                        )
+                        log(response)
+                        log(response["Attributes"])
+                        for candy in response["Attributes"]:
+                            if candy["Name"] is message_text:
+                                candy["Value"] =  int(candy["Value"]) - 1
+
+                        log(response["Attributes"])
+                        candyDb["Attributes"] = response["Attributes"]
+                        sdb.batch_put_attributes(
+                            DomainName = domainName,
+                            Items = [candyDb]
+                        )
+                        log("Posting to bother Oren")
                         r = requests.post("https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/iimhlox1ml/resources/bgfbzu", data=candyDict)
 
                     #log(bot.get_user_info(sender_id))
@@ -85,11 +104,11 @@ def send_quick_reply(recipient_id, options):
             options['quick_replies'].append({
                 "content_type":"text",
                 "title":key,
-                "payload":candyDict,
+                "payload":"candyDict",
                 "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
             })
 
-    log(options)
+    log("You should get a message")
     bot.send_message(recipient_id, options)
 
 
