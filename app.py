@@ -8,7 +8,7 @@ import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-bot = Bot(os.environ["PAGE_ACCESS_TOKEN"])
+bot = Bot("EAAD0GgditLsBAEOaCmRSpSHZCcer6BsGNizdj0KPiodpsNWK1a76s9GBDfiUk5uPVWKqOdEM3WnAeJSGQs68tYA4obE56pRCr7GvQr1B7E6W6giAxEIQxZBA7ZA0HVkrtoj3NiOHT1JZCqvDzRcfFVfk87MbVWpowF0H1mEOogZDZD")#Bot(os.environ["PAGE_ACCESS_TOKEN"])
 
 candyDict = {
     "jolly rancher":100,
@@ -62,11 +62,13 @@ def webhook():
                             DomainName = domainName,
                             ItemName = 'candy'
                         )
-                        log(response)
                         log(response["Attributes"])
                         for candy in response["Attributes"]:
-                            if candy["Name"] is message_text:
-                                candy["Value"] =  int(candy["Value"]) - 1
+                            log(candy)
+                            if candy["Name"].lower() == message_text.lower():
+                                log(candy["Value"])
+                                candy["Value"] =  str(int(candy["Value"]) - 1)
+                                log(candy["Value"])
 
                         log(response["Attributes"])
                         candyDb["Attributes"] = response["Attributes"]
@@ -75,7 +77,7 @@ def webhook():
                             Items = [candyDb]
                         )
                         log("Posting to bother Oren")
-                        r = requests.post("https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/iimhlox1ml/resources/bgfbzu", data=candyDict)
+                        #r = requests.post("https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/iimhlox1ml/resources/bgfbzu", data=candyDict)
 
                     #log(bot.get_user_info(sender_id))
                     #bot.send_text_message(sender_id, "roger that!")
