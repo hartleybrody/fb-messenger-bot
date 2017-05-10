@@ -73,10 +73,27 @@ def webhook():
                             send_candy_options(sender_id, message_text)
                             return "ok", 200
 
-                        if "payload" in messaging_event["message"]["quick_reply"]:
-                            response = sdb.get_attributes(
+                        response = sdb.get_attributes(
+                            DomainName = domainName,
+                            ItemName = 'candy'
+                        )
+                        log(response["Attributes"])
+                        candy_found = False
+                        for candy in response["Attributes"]:
+                            log(candy)
+                            if candy["Name"].lower() == message_text.lower():
+                                candy_found = True
+                                log(candy["Value"])
+                                candy["Value"] =  str(int(candy["Value"]) - 1)
+                                log(candy["Value"])
+                                candy["Replace"] = True
+                                log(candy)
+                        if candy_found:
+                            log(response["Attributes"])
+                            candyDb["Attributes"] = response["Attributes"]
+                            sdb.batch_put_attributes(
                                 DomainName = domainName,
-                                ItemName = 'candy'
+                                Items = [candyDb]
                             )
                             log(response["Attributes"])
                             candy_found = False
@@ -101,7 +118,6 @@ def webhook():
                                 candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                                 r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                                 send_message(senderId, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but leagally distinct) delivery")
-
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
