@@ -97,7 +97,7 @@ def webhook():
                             log("Posting to bother Oren")
                             user_info = get_user_info(sender_id)
                             candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
-                            #r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
+                            r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                             #log(r)
                             send_quick_reply(sender_id, {})
 
@@ -125,31 +125,31 @@ def solicit_review():
         {
             "content_type":"text",
             "title":"1",
-            "payload":"1",
+            "payload":"1 star",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
             "title":"2",
-            "payload":"2",
+            "payload":"2 stars",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
             "title":"3",
-            "payload":"3",
+            "payload":"3 stars",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
             "title":"4",
-            "payload":"4",
+            "payload":"4 stars",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         },
         {
             "content_type":"text",
             "title":"5",
-            "payload":"5",
+            "payload":"5 stars",
             "image_url":"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/star-128.png"
         }
     ]
