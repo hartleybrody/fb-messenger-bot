@@ -93,14 +93,29 @@ def webhook():
                     pass
 
                 if messaging_event.get("postback") or messaging_event.get("referral"):  # user clicked/tapped "postback" button in earlier message
+                    log("Referral or postback")
+                    log(messaging_event)
                     send_quick_reply(sender_id, {})
 
     return "ok", 200
 
+def get_user_info(sender_id):
+    url = "https://graph.facebook.com/v2.6/" + sender_id + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=EAAD0GgditLsBADZAkcimL0Geyg9r9VyGFvCGoVFm5YhNlZCw3fliqbqXZB5lWnNJnGSm5oMLZCZBZCuRSHqHMgyBimmDl09MVZCcOAmnspRxsGYVTqIsleWogSAeaWvQXDcmr7rqlZAW962UgdgEwTNrDaTTqhQHqhas1I3KcYwRxwZDZD"
+    info = requests.get(url)
+    log(url)
+    log(info.json())
+    return info.json()
+
 def send_quick_reply(recipient_id, options):
+    info = get_user_info(recipient_id)
+    greeting = "Hello "
+    if info["gender"] == "male":
+        greeting += "Mr. Bond... I mean " + info["last_name"]
+    else:
+        greeting += "miss " + info["last_name"]
 
     options = {
-        "text":"Thank you for picking SCRUBS candy\nPick a candy:",
+        "text": greeting + "\nThank you for picking SCRUBS candy\nPick a candy:",
         "quick_replies":[]
     }
     for key in candyDict:
