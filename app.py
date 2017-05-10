@@ -55,30 +55,31 @@ def webhook():
                     }
 
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
-                    message_text = messaging_event["message"]["text"]  # the message's text
+                    if "Text" in messaging_event["message"]:
+                        message_text = messaging_event["message"]["text"]  # the message's text
 
-                    if message_text in candyDict and candyDict[message_text] > 0:
-                        response = sdb.get_attributes(
-                            DomainName = domainName,
-                            ItemName = 'candy'
-                        )
-                        log(response["Attributes"])
-                        for candy in response["Attributes"]:
-                            log(candy)
-                            if candy["Name"].lower() == message_text.lower():
-                                log(candy["Value"])
-                                candy["Value"] =  str(int(candy["Value"]) - 1)
-                                log(candy["Value"])
+                        if message_text in candyDict:
+                            response = sdb.get_attributes(
+                                DomainName = domainName,
+                                ItemName = 'candy'
+                            )
+                            log(response["Attributes"])
+                            for candy in response["Attributes"]:
+                                log(candy)
+                                if candy["Name"].lower() == message_text.lower():
+                                    log(candy["Value"])
+                                    candy["Value"] =  str(int(candy["Value"]) - 1)
+                                    log(candy["Value"])
 
-                        log(response["Attributes"])
-                        candyDb["Attributes"] = response["Attributes"]
-                        sdb.batch_put_attributes(
-                            DomainName = domainName,
-                            Items = [candyDb]
-                        )
-                        log("Posting to bother Oren")
-                        r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=candyDict)
-                        log(r)
+                            log(response["Attributes"])
+                            candyDb["Attributes"] = response["Attributes"]
+                            sdb.batch_put_attributes(
+                                DomainName = domainName,
+                                Items = [candyDb]
+                            )
+                            log("Posting to bother Oren")
+                            r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=candyDict)
+                            log(r)
 
                     #log(bot.get_user_info(sender_id))
                     #bot.send_text_message(sender_id, "roger that!")
