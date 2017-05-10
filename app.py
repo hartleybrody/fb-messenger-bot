@@ -73,7 +73,7 @@ def webhook():
                             send_candy_options(sender_id, message_text)
                             return "ok", 200
 
-                        if "payload" in messaging_event["message"]:
+                        if "payload" in messaging_event["message"]["quick_reply"]:
                             response = sdb.get_attributes(
                                 DomainName = domainName,
                                 ItemName = 'candy'
