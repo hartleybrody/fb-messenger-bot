@@ -28,9 +28,13 @@ candyCategory = {
     "fruity": fruityDict
 }
 
-reviewActions = {
-    "Continue Review",
+ongoingReviewActions = {
     "Complete Review"
+}
+
+newReviewActions = {
+    "Complete Review",
+    "Continue Review"
 }
 
 sdb = boto3.client('sdb')
@@ -80,15 +84,21 @@ def webhook():
                             return "ok", 200
                         elif RepresentsInt(message_text): #TODO: and "Attributes" in pendingReviewsDb:
                             starRating = int(message_text)
-                            #TODO: add quick replies to continue or finish review
-                            #       - add to pending_reviews
                             if starRating < 4:
-                                send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
+                                options = build_quick_replies_from_dict(
+                                    newReviewActions,
+                                    "I'm sorry your candy experience was not to your complete satisfaction. If you'd like to tell us how we could improve, click 'Continue Review'."
+                                )
+                                bot.send_message(sender_id, options)
                             else:
-                                send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!")
-                        #TODO: add elif to detect review actions (continue, complete)
-                        #       - if continue, start asking CDVs
-
+                                options = build_quick_replies_from_dict(
+                                    newReviewActions,
+                                    "I'm happy to hear you enjoyed your candy! If you'd like to let us know what you thought was GREAT about it, click 'Continue Review'."
+                                )
+                                bot.send_message(sender_id, options)
+                        elif message_text in newReviewActions:
+                            #TODO: if continue, start asking CDVs
+                            return "ok", 200
                         response = get_db_item('candy')
                         candy_found = False
                         for candy in response["Attributes"]:
@@ -109,6 +119,7 @@ def webhook():
                             candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                             r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                             send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but leagally distinct) delivery")
+                        #todo: add elif to collect CDD answers without displaying the message below (pending a continuing review)
                         else:
                             send_message(sender_id, "We're sorry, your choice of '" + message_text + "' is not currently available.")
                             send_quick_reply(sender_id, {})
