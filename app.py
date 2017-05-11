@@ -133,6 +133,13 @@ def solicit_review():
     user_info = get_user_info(sender_id)
     request_message = "Hello " + user_info["first_name"] + ",\nHow would you rate your " + candy + "?"
     log("Request message: " + request_message)
+    sdb.put_attributes(
+        DomainName = "steven.hernandez",
+        Item = {
+            'Name': sender_id,
+            'Attributes': []
+        }
+    )
     quick_replies = [
         {
             "content_type":"text",
@@ -166,7 +173,6 @@ def solicit_review():
         }
     ]
     bot.send_message(sender_id, {"text": request_message, "quick_replies": quick_replies})
-    #TODO: add the user to the pending reviews item
     return "ok", 200
 
 def get_user_info(sender_id):
