@@ -28,6 +28,11 @@ candyCategory = {
     "fruity": fruityDict
 }
 
+reviewActions = {
+    "Continue Review",
+    "Complete Review"
+}
+
 sdb = boto3.client('sdb')
 
 domainName = 'steven.hernandez'
@@ -59,54 +64,51 @@ def webhook():
                 sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
 
                 if messaging_event.get("message"):  # someone sent us a message
+                    log(messaging_event["message"])
+
                     candyDb = {
                         'Name': 'candy',
                         'Attributes': []
                     }
-
-                    recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
-                    log(messaging_event["message"])
+                    pendingReviewsDb = get_db_item(sender_id)
+                    
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
 
                         if message_text in candyCategory:
                             send_candy_options(sender_id, message_text)
                             return "ok", 200
+                        elif RepresentsInt(message_text): #TODO: and "Attributes" in pendingReviewsDb:
+                            starRating = int(message_text)
+                            #TODO: add quick replies to continue or finish review
+                            #       - add to pending_reviews
+                            if starRating < 4:
+                                send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
+                            else:
+                                send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!")
+                        #TODO: add elif to detect review actions (continue, complete)
+                        #       - if continue, start asking CDVs
 
-                        response = sdb.get_attributes(
-                            DomainName = domainName,
-                            ItemName = 'candy'
-                        )
-                        log(response["Attributes"])
+                        response = get_db_item('candy')
                         candy_found = False
                         for candy in response["Attributes"]:
-                            log(candy)
                             if candy["Name"].lower() == message_text.lower():
                                 num_available_candies = int(candy["Value"])
                                 candy_found = num_available_candies > 0
                         if candy_found:
-                            log(candy["Value"])
-                            candy["Value"] =  str(num_available_candies - 1)
-                            log(candy["Value"])
-                            candy["Replace"] = True
+                            log("found candy: ")
                             log(candy)
-                            log(response["Attributes"])
+                            candy["Value"] =  str(num_available_candies - 1)
+                            candy["Replace"] = True
                             candyDb["Attributes"] = response["Attributes"]
                             sdb.batch_put_attributes(
                                 DomainName = domainName,
                                 Items = [candyDb]
                             )
-                            log("Posting to bother Oren")
                             user_info = get_user_info(sender_id)
                             candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                             r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
                             send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but leagally distinct) delivery")
-                        elif RepresentsInt(message_text):
-                            starRating = int(message_text)
-                            if starRating < 4:
-                                send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
-                            else:
-                                send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!")
                         else:
                             send_message(sender_id, "We're sorry, your choice of '" + message_text + "' is not currently available.")
                             send_quick_reply(sender_id, {})
@@ -164,6 +166,7 @@ def solicit_review():
         }
     ]
     bot.send_message(sender_id, {"text": request_message, "quick_replies": quick_replies})
+    #TODO: add the user to the pending reviews item
     return "ok", 200
 
 def get_user_info(sender_id):
@@ -226,27 +229,31 @@ def send_candy_options(recipient_id, category):
         DomainName = domainName,
         ItemName = 'candy'
     )
-    candyAmount = 0
-    candyDict = {}
-    for candy in response["Attributes"]:
-        candyDict[candy["Name"].lower()] = candy["Value"]
-
-    options = {
-        "text": "Choose yo candy",
-        "quick_replies":[]
-    }
+    available_candies = {}
 
     for key in candyCategory[category]:
-        log(candyDict[key.lower()])
-        if int(candyDict[key.lower()].lower()) > 0:
-            options['quick_replies'].append({
-                "content_type":"text",
-                "title":key,
-                "payload":category,
-                "image_url":"https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png"
-            })
+        if int(response["Attributes"][key.lower()]["Value"]) > 0:
+            available_candies[key] = category
+
+    options = build_quick_replies_from_dict(available_candies, "Which candy would you like to sample?", "https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png")
     log("You should get a message")
     bot.send_message(recipient_id, options)
+
+def build_quick_replies_from_dict(target_dict, base_level_text, image_url):
+    options = {
+        "text": base_level_text,
+        "quick_replies":[]
+    }
+    for key, value in target_dict:
+        option = {
+            "content_type":"text",
+            "title":key,
+            "payload":value
+        }
+        if image_url is not None:
+            option["image_url"] = image_url
+        options['quick_replies'].append(option)
+    return options
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
@@ -259,6 +266,14 @@ def RepresentsInt(s):
     except ValueError:
         return False
 
+def get_db_item(name, domainName='steven.hernandez'):
+    response = sdb.get_attributes(
+                DomainName = domainName,
+                ItemName = name
+            )
+    log("get_attributes response:")
+    log(response)
+    return response
 
 
 if __name__ == '__main__':
