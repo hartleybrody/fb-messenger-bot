@@ -202,12 +202,12 @@ def send_quick_reply(recipient_id, options):
     info = get_user_info(recipient_id)
     greeting = "Hello "
     if info["gender"] == "male":
-        greeting += "Mr. Bond... I mean " + info["last_name"]
+        greeting += "Mr. " + info["last_name"]
     else:
-        greeting += "miss " + info["last_name"]
+        greeting += "Ms. " + info["last_name"]
 
     options = {
-        "text": greeting + "Welcome to BV Sampling!\nWhich type of candy do you typically prefer?",
+        "text": greeting + "\nWelcome to BV Sampling!\nWhich type of candy do you typically prefer?",
         "quick_replies":[]
     }
     for key in candyCategory:
