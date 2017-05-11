@@ -147,14 +147,22 @@ def solicit_review():
     request_message = "Hello " + user_info["first_name"] + ",\nHow would you rate your " + candy + "?"
     log("Request message: " + request_message)
     pending_reviews = get_db_item(sender_id)
-    pending_reviews["Attributes"].append({
-        "Name": candy,
-        "Value": 0
-    })
+    if "Attributes" in pending_reviews:
+        pending_reviews["Attributes"].append({
+            "Name": candy,
+            "Value": 0
+        })
+    else:
+        pending_reviews["Attributes"] = [
+            {
+                "Name": candy,
+                "Value": 0
+            }
+        ]
 
     sdb.put_attributes(
         DomainName = "steven.hernandez",
-        Item = pending_reviews
+        ItemName = pending_reviews
     )
     quick_replies = [
         {
@@ -275,11 +283,11 @@ def build_quick_replies_from_dict(target_dict, base_level_text, image_url):
         "text": base_level_text,
         "quick_replies":[]
     }
-    for key, value in target_dict:
+    for key in target_dict:
         option = {
             "content_type":"text",
             "title":key,
-            "payload":value
+            "payload":target_dict[key]
         }
         if image_url is not None:
             option["image_url"] = image_url
