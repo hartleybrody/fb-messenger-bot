@@ -147,10 +147,18 @@ def solicit_review():
     request_message = "Hello " + user_info["first_name"] + ",\nHow would you rate your " + candy + "?"
     log("Request message: " + request_message)
     pending_reviews = get_db_item(sender_id)
-    pending_reviews["Attributes"].append({
-        "Name": candy,
-        "Value": 0
-    })
+    if "Attributes" in pending_reviews:
+        pending_reviews["Attributes"].append({
+            "Name": candy,
+            "Value": 0
+        })
+    else:
+        pending_reviews["Attributes"] = [
+            {
+                "Name": candy,
+                "Value": 0
+            }
+        ]
 
     sdb.put_attributes(
         DomainName = "steven.hernandez",
