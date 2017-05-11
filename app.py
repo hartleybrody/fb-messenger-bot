@@ -162,7 +162,7 @@ def solicit_review():
 
     sdb.put_attributes(
         DomainName = "steven.hernandez",
-        Item = pending_reviews
+        ItemName = pending_reviews
     )
     quick_replies = [
         {
