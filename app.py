@@ -268,11 +268,11 @@ def build_quick_replies_from_dict(target_dict, base_level_text, image_url):
         "text": base_level_text,
         "quick_replies":[]
     }
-    for key, value in target_dict:
+    for key in target_dict:
         option = {
             "content_type":"text",
             "title":key,
-            "payload":value
+            "payload":target_dict[key]
         }
         if image_url is not None:
             option["image_url"] = image_url
