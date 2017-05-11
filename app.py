@@ -253,9 +253,11 @@ def send_candy_options(recipient_id, category):
     )
     available_candies = {}
 
-    for key in candyCategory[category]:
-        if int(response["Attributes"][key.lower()]["Value"]) > 0:
-            available_candies[key] = category
+    for candy_name in candyCategory[category]:
+        for db_candy in response["Attributes"]:
+            db_candy_name = response["Attributes"]["Name"]
+            if candy_name.lower() == db_candy_name and int(db_candy["Value"]) > 0:
+                available_candies[candy_name] = category
 
     options = build_quick_replies_from_dict(available_candies, "Which candy would you like to sample?", "https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png")
     log("You should get a message")
