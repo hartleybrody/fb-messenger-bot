@@ -255,7 +255,7 @@ def send_candy_options(recipient_id, category):
 
     for candy_name in candyCategory[category]:
         for db_candy in response["Attributes"]:
-            db_candy_name = response["Attributes"]["Name"]
+            db_candy_name = db_candy["Name"]
             if candy_name.lower() == db_candy_name and int(db_candy["Value"]) > 0:
                 available_candies[candy_name] = category
 
