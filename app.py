@@ -76,7 +76,7 @@ def webhook():
                     }
                     pendingReviewsDb = get_db_item(sender_id)
                     pending_review_found = "Attributes" in pendingReviewsDb
-                    
+
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
 
@@ -102,10 +102,10 @@ def webhook():
                             return "ok", 200
                         response = get_db_item('candy')
                         candy_found = False
-                        for candy in response["Attributes"]:
-                            if candy["Name"].lower() == message_text.lower():
-                                num_available_candies = int(candy["Value"])
-                                candy_found = num_available_candies > 0
+                        candy = find_in_db_attributes(response, message_text)
+                        if candy is not None:
+                            num_available_candies = int(candy["Value"])
+                            candy_found = num_available_candies > 0
                         if candy_found:
                             log("found candy: ")
                             log(candy)
@@ -245,6 +245,13 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
+def find_in_db_attributes(response, keyToFind):
+    for item in response["Attributes"]:
+        if item["Name"] == keyToFind:
+            return item
+        else:
+            return None
+
 def send_candy_options(recipient_id, category):
 
     response = sdb.get_attributes(
@@ -254,10 +261,10 @@ def send_candy_options(recipient_id, category):
     available_candies = {}
 
     for candy_name in candyCategory[category]:
-        for db_candy in response["Attributes"]:
-            db_candy_name = response["Attributes"]["Name"]
-            if candy_name.lower() == db_candy_name and int(db_candy["Value"]) > 0:
-                available_candies[candy_name] = category
+        db_candy = find_in_db_attributes(response, candy_name)
+        db_candy_name = db_candy["Name"]
+        if candy_name.lower() == db_candy_name and int(db_candy["Value"]) > 0:
+            available_candies[candy_name] = category
 
     options = build_quick_replies_from_dict(available_candies, "Which candy would you like to sample?", "https://cdn0.iconfinder.com/data/icons/food-volume-1-4/48/78-512.png")
     log("You should get a message")
