@@ -65,7 +65,7 @@ def webhook():
 
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
-                sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
+                sender_id = messaging_event["sender"]["id"] # the facebook ID of the person sending you the message
 
                 if messaging_event.get("message"):  # someone sent us a message
                     log(messaging_event["message"])
@@ -75,6 +75,7 @@ def webhook():
                         'Attributes': []
                     }
                     pendingReviewsDb = get_db_item(sender_id)
+                    pending_review_found = "Attributes" in pendingReviewsDb
                     
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
@@ -82,7 +83,7 @@ def webhook():
                         if message_text in candyCategory:
                             send_candy_options(sender_id, message_text)
                             return "ok", 200
-                        elif RepresentsInt(message_text): #TODO: and "Attributes" in pendingReviewsDb:
+                        elif RepresentsInt(message_text) and pending_review_found:
                             starRating = int(message_text)
                             if starRating < 4:
                                 options = build_quick_replies_from_dict(
@@ -118,8 +119,9 @@ def webhook():
                             user_info = get_user_info(sender_id)
                             candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                             r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
-                            send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but leagally distinct) delivery")
-                        #todo: add elif to collect CDD answers without displaying the message below (pending a continuing review)
+                            send_message(sender_id, "Thank you for choosing to sample " + message_text + ". Be prepared for freaky fast (but leagally distinct) delivery")
+                        elif pending_review_found:
+                            return "ok", 200
                         else:
                             send_message(sender_id, "We're sorry, your choice of '" + message_text + "' is not currently available.")
                             send_quick_reply(sender_id, {})
@@ -144,12 +146,15 @@ def solicit_review():
     user_info = get_user_info(sender_id)
     request_message = "Hello " + user_info["first_name"] + ",\nHow would you rate your " + candy + "?"
     log("Request message: " + request_message)
+    pending_reviews = get_db_item(sender_id)
+    pending_reviews["Attributes"].append({
+        "Name": candy,
+        "Value": 0
+    })
+
     sdb.put_attributes(
         DomainName = "steven.hernandez",
-        Item = {
-            'Name': sender_id,
-            'Attributes': []
-        }
+        Item = pending_reviews
     )
     quick_replies = [
         {
@@ -202,7 +207,7 @@ def send_quick_reply(recipient_id, options):
         greeting += "miss " + info["last_name"]
 
     options = {
-        "text": greeting + "\nThank you for picking SCRUBS candy\nPick a candy category you'd like to choose from:",
+        "text": greeting + "Welcome to BV Sampling!\nWhich type of candy do you typically prefer?",
         "quick_replies":[]
     }
     for key in candyCategory:
