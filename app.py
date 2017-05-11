@@ -82,13 +82,14 @@ def webhook():
                         for candy in response["Attributes"]:
                             log(candy)
                             if candy["Name"].lower() == message_text.lower():
-                                candy_found = True
-                                log(candy["Value"])
-                                candy["Value"] =  str(int(candy["Value"]) - 1)
-                                log(candy["Value"])
-                                candy["Replace"] = True
-                                log(candy)
+                                num_available_candies = int(candy["Value"])
+                                candy_found = num_available_candies > 0
                         if candy_found:
+                            log(candy["Value"])
+                            candy["Value"] =  str(num_available_candies - 1)
+                            log(candy["Value"])
+                            candy["Replace"] = True
+                            log(candy)
                             log(response["Attributes"])
                             candyDb["Attributes"] = response["Attributes"]
                             sdb.batch_put_attributes(
@@ -99,14 +100,16 @@ def webhook():
                             user_info = get_user_info(sender_id)
                             candy_request = {"senderId": sender_id, "choice": message_text, "name": user_info['first_name'] + " " + user_info['last_name']}
                             r = requests.post("https://iimhlox1ml.execute-api.us-east-1.amazonaws.com/hackathon/candy-request?requestId=gibberish", data=json.dumps(candy_request))
-                            send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but legally distinct from Jimmy John's) delivery\nNo need to provide address https://i.imgflip.com/1ou13m.jpg")
+                            send_message(sender_id, "Thank you for choosing to sample " + message_text + " be prepared for freaky fast (but leagally distinct) delivery")
+                        elif RepresentsInt(message_text):
+                            starRating = int(message_text)
+                            if starRating < 4:
+                                send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
+                            else:
+                                send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!")
                         else:
-                            if RepresentsInt(message_text):
-                                starRating = int(message_text)
-                                if starRating < 4:
-                                    send_message(sender_id, "I'm sorry your candy experience was not to your complete satisfaction, please let me know how we can improve in the future")
-                                else:
-                                    send_message(sender_id, "I'm happy to hear you enjoyed your candy! Please let us know what you thought was GREAT about it!")
+                            send_message(sender_id, "We're sorry, your choice of '" + message_text + "' is not currently available.")
+                            send_quick_reply(sender_id, {})
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
