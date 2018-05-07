@@ -8,13 +8,14 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+token_verify = "token_verify"
 
 @app.route('/', methods=['GET'])
 def verify():
     # when the endpoint is registered as a webhook, it must echo back
     # the 'hub.challenge' value it receives in the query arguments
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
-        if not request.args.get("hub.verify_token") == os.environ["VERIFY_TOKEN"]:
+        if not request.args.get("hub.verify_token") == os.environ[token_verify]:
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
 
@@ -35,12 +36,12 @@ def webhook():
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
-
+                    r = requests.get('http://api.openweathermap.org/data/2.5/weather?q=Kolno&units=metric&APPID=99e6ea5ffa19e97fdfd22a355265c353')
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    send_message(sender_id, "roger that!")
+                    send_message(sender_id, r)
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -59,7 +60,7 @@ def send_message(recipient_id, message_text):
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
+        "access_token": os.environ["EAAE5iQt8ZAZB0BAMCbZCZAySNTuQ1qwWRteZBRiZA2bZCns6OvkrTUoGKAbuRZA4N8787cIYaodEFydHcuO6jzRSGWmOChFQQTvZC0HBR09WdHw8ZChUtRJ0w0nk5euUZCFidkvQh20Y28UZCZBMgT8Ko6jmOL7SNfaMAAZCyVJHZCJkbDjJZCFYD3dUphnK"]
     }
     headers = {
         "Content-Type": "application/json"
@@ -91,4 +92,5 @@ def log(msg, *args, **kwargs):  # simple wrapper for logging to stdout on heroku
 
 
 if __name__ == '__main__':
+    
     app.run(debug=True)
